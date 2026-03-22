@@ -1,0 +1,3 @@
+{
+  "extends": "@2026-03-22-ai-24-staff/config/tsconfig.base.json"
+}
