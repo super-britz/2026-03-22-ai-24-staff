@@ -24,6 +24,11 @@ First, install the dependencies:
 bun install
 ```
 
+## Deployment Status
+
+This repository is currently configured for local development only.
+No cloud deployment target is configured for either the web app or the server.
+
 ## Database Setup
 
 This project uses PostgreSQL with Drizzle ORM.
@@ -72,14 +77,6 @@ import { Button } from "@2026-03-22-ai-24-staff/ui/components/button";
 
 If you want to add app-specific blocks instead of shared primitives, run the shadcn CLI from `apps/web`.
 
-## Deployment (Cloudflare via Alchemy)
-
-- Dev: cd apps/web && bun run alchemy dev
-- Deploy: cd apps/web && bun run deploy
-- Destroy: cd apps/web && bun run destroy
-
-For more details, see the guide on [Deploying to Cloudflare with Alchemy](https://www.better-t-stack.dev/docs/guides/cloudflare-alchemy).
-
 ## Git Hooks and Formatting
 
 - Format and lint fix: `bun run check`
@@ -99,7 +96,7 @@ For more details, see the guide on [Deploying to Cloudflare with Alchemy](https:
 
 ## Available Scripts
 
-- `bun run dev`: Start all applications in development mode
+- `bun run dev`: Start the web app and API server for local development
 - `bun run build`: Build all applications
 - `bun run dev:web`: Start only the web application
 - `bun run dev:server`: Start only the server

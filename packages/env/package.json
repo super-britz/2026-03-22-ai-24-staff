@@ -14,7 +14,6 @@
 	},
 	"devDependencies": {
 		"@2026-03-22-ai-24-staff/config": "workspace:*",
-		"@2026-03-22-ai-24-staff/infra": "workspace:*",
 		"@types/node": "^22.13.14",
 		"typescript": "^5"
 	}

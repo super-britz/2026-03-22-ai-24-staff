@@ -3,10 +3,10 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"dev": "react-router dev",
 		"build": "react-router build",
 		"start": "react-router-serve ./build/server/index.js",
-		"typecheck": "react-router typegen && tsc",
-		"dev:bare": "react-router dev"
+		"typecheck": "react-router typegen && tsc"
 	},
 	"dependencies": {
 		"@2026-03-22-ai-24-staff/api": "workspace:*",
@@ -37,7 +37,6 @@
 		"@types/node": "^20",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
-		"alchemy": "catalog:",
 		"react-router-devtools": "^1.1.0",
 		"tailwindcss": "catalog:",
 		"typescript": "^5.8.3",

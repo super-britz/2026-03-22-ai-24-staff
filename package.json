@@ -19,13 +19,12 @@
 			"@trpc/client": "^11.7.2",
 			"@types/react": "^19.2.10",
 			"@types/react-dom": "^19.2.3",
-			"tailwindcss": "^4.1.18",
-			"alchemy": "^0.87.0"
+			"tailwindcss": "^4.1.18"
 		}
 	},
 	"type": "module",
 	"scripts": {
-		"dev": "turbo dev",
+		"dev": "turbo dev --filter=web --filter=server",
 		"build": "turbo build",
 		"check-types": "turbo check-types",
 		"dev:web": "turbo -F web dev",
@@ -34,8 +33,6 @@
 		"db:studio": "turbo -F @2026-03-22-ai-24-staff/db db:studio",
 		"db:generate": "turbo -F @2026-03-22-ai-24-staff/db db:generate",
 		"db:migrate": "turbo -F @2026-03-22-ai-24-staff/db db:migrate",
-		"deploy": "turbo -F @2026-03-22-ai-24-staff/infra deploy",
-		"destroy": "turbo -F @2026-03-22-ai-24-staff/infra destroy",
 		"check": "biome check --write ."
 	},
 	"dependencies": {
@@ -46,7 +43,6 @@
 	"devDependencies": {
 		"@2026-03-22-ai-24-staff/config": "workspace:*",
 		"@biomejs/biome": "^2.2.0",
-		"@cloudflare/workers-types": "^4.20251213.0",
 		"@types/node": "^22.13.14",
 		"turbo": "^2.8.12",
 		"typescript": "^5"
