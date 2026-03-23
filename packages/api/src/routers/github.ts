@@ -22,6 +22,7 @@ async function fetchGitHubUser(token: string) {
 			Authorization: `Bearer ${token}`,
 			Accept: "application/vnd.github.v3+json",
 		},
+		signal: AbortSignal.timeout(10_000),
 	});
 
 	if (!response.ok) {
@@ -94,6 +95,13 @@ export const githubRouter = router({
 					name: githubProfiles.name,
 				});
 
-			return result[0];
+			const saved = result[0];
+			if (!saved) {
+				throw new TRPCError({
+					code: "INTERNAL_SERVER_ERROR",
+					message: "保存失败",
+				});
+			}
+			return saved;
 		}),
 });

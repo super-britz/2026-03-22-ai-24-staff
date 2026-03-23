@@ -14,6 +14,7 @@ import { Input } from "@2026-03-22-ai-24-staff/ui/components/input";
 import { Label } from "@2026-03-22-ai-24-staff/ui/components/label";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { trpc } from "@/utils/trpc";
 
@@ -56,6 +57,7 @@ export default function GitHubPage() {
 			onSuccess() {
 				setPreviewUser(null);
 				setToken("");
+				toast.success("GitHub 账号绑定成功");
 			},
 		}),
 	);
