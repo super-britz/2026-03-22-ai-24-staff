@@ -34,6 +34,7 @@ description: >
 
 #### 检查点2：业务逻辑实现
 - 写完功能代码
+- 如果新增了 `import` 外部包，检查目标 `package.json` 是否已声明该依赖（Monorepo 提升机制会让 TypeScript 找到类型但运行时找不到包）
 - 验证：`turbo check-types` 通过（无 TypeScript 报错）
 
 #### 检查点3：测试编写
@@ -45,7 +46,12 @@ description: >
 #### 检查点4：完整验证
 运行：
 ```bash
-turbo check-types && vitest run --related {变更的文件}
+turbo check-types && bun dev
+```
+等待 `bun dev` 启动成功（服务端无报错、前端编译无报错），确认运行时模块解析正常后退出。
+如果配置了测试，追加运行：
+```bash
+vitest run --related {变更的文件}
 ```
 必须全部通过。如果失败：
 1. 读取错误信息
