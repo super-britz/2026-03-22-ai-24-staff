@@ -18,8 +18,6 @@ import { toast } from "sonner";
 
 import { trpc } from "@/utils/trpc";
 
-import type { Route } from "./+types/github";
-
 interface GitHubUser {
 	login: string;
 	name: string | null;
@@ -30,17 +28,11 @@ interface GitHubUser {
 	followers: number;
 }
 
-export function meta(_args: Route.MetaArgs) {
-	return [
-		{ title: "GitHub 绑定 - 2026-03-22-ai-24-staff" },
-		{
-			name: "description",
-			content: "绑定你的 GitHub 账号",
-		},
-	];
+interface GitHubBindFormProps {
+	onSuccess: () => void;
 }
 
-export default function GitHubPage() {
+export function GitHubBindForm({ onSuccess }: GitHubBindFormProps) {
 	const [token, setToken] = useState("");
 	const [previewUser, setPreviewUser] = useState<GitHubUser | null>(null);
 
@@ -58,6 +50,7 @@ export default function GitHubPage() {
 				setPreviewUser(null);
 				setToken("");
 				toast.success("GitHub 账号绑定成功");
+				onSuccess();
 			},
 		}),
 	);
@@ -77,9 +70,7 @@ export default function GitHubPage() {
 	}
 
 	return (
-		<div className="container mx-auto max-w-lg px-4 py-8">
-			<h1 className="mb-6 font-bold text-2xl">绑定 GitHub 账号</h1>
-
+		<>
 			{!previewUser ? (
 				<Card>
 					<form onSubmit={handleVerify}>
@@ -159,9 +150,6 @@ export default function GitHubPage() {
 								{saveMutation.error.message}
 							</p>
 						)}
-						{saveMutation.isSuccess && (
-							<p className="mt-4 text-green-600 text-sm">保存成功！</p>
-						)}
 					</CardContent>
 					<CardFooter className="flex gap-2">
 						<Button onClick={handleSave} disabled={saveMutation.isPending}>
@@ -177,6 +165,6 @@ export default function GitHubPage() {
 					</CardFooter>
 				</Card>
 			)}
-		</div>
+		</>
 	);
 }

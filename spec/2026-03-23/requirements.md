@@ -1,35 +1,50 @@
-# 需求：用户列表展示 + 绑定去重
+# 需求：将 GitHub 绑定表单移入用户列表页面
+
 > 日期：2026-03-23
 > 来源：手动描述
 > 优先级：P1
 
 ## 业务背景
-当前系统支持 GitHub Token 绑定并保存用户资料到数据库，但没有前端页面展示已绑定的用户列表。同时现有的 saveProfile 逻辑在同一用户重复绑定时会更新所有字段（名称、头像、bio 等），需求方希望重复绑定时只更新时间戳和 Token，其余字段保持首次绑定时的值。
+
+当前 GitHub 账号绑定功能位于独立的 `/github` 页面，用户需要在"绑定"和"查看列表"两个页面之间切换。
+将绑定表单移至用户列表页面（`/users`），使绑定操作和列表展示在同一页面完成，减少页面跳转，提升操作效率。
+
+目标用户：使用系统的 staff 成员（需要绑定自己的 GitHub 账号）。
+
+衡量标准：用户可以在 `/users` 页面直接完成 GitHub 账号绑定并立即看到列表更新，无需跳转至其他页面。
 
 ## 功能需求
-- REQ-001：新增前端用户列表页面，展示所有已绑定 GitHub 用户的详细信息（头像、用户名、姓名、bio、邮箱、公开仓库数、粉丝数、绑定时间）
-- REQ-002：修改后端 saveProfile 去重逻辑 — 同一 login 重复绑定时仅更新 updatedAt 和 encryptedToken，不更新其他资料字段
-- REQ-003：新增后端查询接口，返回用户列表数据（不包含 encryptedToken 等敏感字段）
+
+- **REQ-001**：在用户列表页面（`/users`）嵌入 GitHub Token 绑定表单
+- **REQ-002**：绑定表单保持原有的两步流程：验证 Token → 确认用户信息 → 保存
+- **REQ-003**：绑定成功后，用户列表自动刷新以展示新绑定的用户
+- **REQ-004**：移除独立的 `/github` 页面路由文件（`github.tsx`）
+- **REQ-005**：从导航栏中移除 "GitHub" 链接（`header.tsx` 中的 `/github` 入口）
 
 ## 技术约束
-- 前后端通过 tRPC 通信（ARCHITECTURE.md 核心规则）
-- 数据库操作仅通过 packages/db（模块边界约束）
-- 前端使用 React 19 + shadcn/ui 组件 + Tailwind CSS 4
-- 遵循 Biome 编码规范（Tab 缩进、双引号）
-- 用户列表查询无需分页（当前数据量小）
+
+- 不对接新的外部系统；沿用现有 `trpc.github.verifyToken` 和 `trpc.github.saveProfile` API
+- 无额外性能要求
+- 影响的现有模块：
+  - `apps/web/src/routes/users.tsx`（修改：嵌入表单）
+  - `apps/web/src/routes/github.tsx`（删除）
+  - `apps/web/src/components/header.tsx`（修改：移除 `/github` 导航链接）
 
 ## 验收标准
-- AC-001：访问用户列表页面能看到所有已绑定用户，包含头像、用户名、姓名、bio、邮箱、公开仓库数、粉丝数、绑定时间
-- AC-002：同一 GitHub 用户（相同 login）重复绑定后，数据库中只有一条记录，且 name/avatarUrl/bio/email/publicRepos/followers 保持首次绑定的值
-- AC-003：重复绑定后 updatedAt 和 encryptedToken 会更新
-- AC-004：用户列表接口不返回 encryptedToken 等敏感信息
-- AC-005：类型检查 (turbo check-types) 通过
+
+- **AC-001**：访问 `/users` 页面，页面同时展示绑定表单和用户列表
+- **AC-002**：在表单中输入有效 GitHub Token，点击"验证"，出现用户信息预览卡片
+- **AC-003**：点击"确认保存"，toast 提示成功，表单清空，列表自动刷新并包含新绑定用户
+- **AC-004**：访问 `/github` 路由返回 404（路由已移除）
+- **AC-005**：导航栏不再出现 "GitHub" 链接
+- **AC-006**：`bun run check-types` 通过，无 TypeScript 错误
 
 ## 不做的事
-- 不做分页、搜索、筛选
-- 不做用户删除功能
-- 不做用户详情页
-- 不做认证/鉴权
+
+- 不对绑定表单的 UI 样式做大幅重新设计，保持现有 Card 组件风格
+- 不添加"解绑"功能（超出本次需求范围）
+- 不更改 tRPC 路由或数据库 schema
 
 ## 待确认
-无
+
+- 无

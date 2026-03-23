@@ -12,8 +12,9 @@ import {
 	TableHeader,
 	TableRow,
 } from "@2026-03-22-ai-24-staff/ui/components/table";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { GitHubBindForm } from "@/components/github-bind-form";
 import { trpc } from "@/utils/trpc";
 
 import type { Route } from "./+types/users";
@@ -74,11 +75,22 @@ function TableSkeleton() {
 }
 
 export default function UsersPage() {
+	const queryClient = useQueryClient();
 	const { data: users, isLoading } = useQuery(trpc.github.list.queryOptions());
 
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<h1 className="mb-6 font-bold text-2xl">用户列表</h1>
+
+			<div className="mb-8 max-w-lg">
+				<GitHubBindForm
+					onSuccess={() => {
+						queryClient.invalidateQueries({
+							queryKey: trpc.github.list.queryOptions().queryKey,
+						});
+					}}
+				/>
+			</div>
 
 			<div className="rounded-md border">
 				<Table>
