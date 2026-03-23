@@ -31,6 +31,6 @@ bash .claude/hooks/init-workflow.sh
 1. 确认 .claude/ARCHITECTURE.md 存在
 2. 确认 .claude/SECURITY.md 存在
 3. 确认 .claude/CODING_GUIDELINES.md 存在
-4. 确认 skills/ 目录下 00-07 的 SKILL.md 都存在
+4. 确认项目根目录 skills/ 下 00-07 的 SKILL.md 都存在（路径为 skills/00-*/SKILL.md 到 skills/07-*/SKILL.md，注意不是 .claude/skills/）
 
 如果任何文件缺失，列出缺失的文件并停止。

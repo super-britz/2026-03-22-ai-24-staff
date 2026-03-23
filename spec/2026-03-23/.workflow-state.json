@@ -1,0 +1,14 @@
+{
+	"status": "complete",
+	"currentPhase": 7,
+	"startedAt": "2026-03-23T11:03:03+08:00",
+	"phases": {
+		"phase1": "complete",
+		"phase2": "complete",
+		"phase3": "complete",
+		"phase4": "complete",
+		"phase5": "complete",
+		"phase6": "complete",
+		"phase7": "complete"
+	}
+}

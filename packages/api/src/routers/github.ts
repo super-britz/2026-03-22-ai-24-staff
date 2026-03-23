@@ -1,6 +1,7 @@
 import { db } from "@2026-03-22-ai-24-staff/db";
 import { githubProfiles } from "@2026-03-22-ai-24-staff/db/schema";
 import { TRPCError } from "@trpc/server";
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
 import { publicProcedure, router } from "../index";
@@ -43,6 +44,24 @@ async function fetchGitHubUser(token: string) {
 }
 
 export const githubRouter = router({
+	list: publicProcedure.query(async () => {
+		return db
+			.select({
+				id: githubProfiles.id,
+				login: githubProfiles.login,
+				name: githubProfiles.name,
+				avatarUrl: githubProfiles.avatarUrl,
+				bio: githubProfiles.bio,
+				email: githubProfiles.email,
+				publicRepos: githubProfiles.publicRepos,
+				followers: githubProfiles.followers,
+				createdAt: githubProfiles.createdAt,
+				updatedAt: githubProfiles.updatedAt,
+			})
+			.from(githubProfiles)
+			.orderBy(desc(githubProfiles.updatedAt));
+	}),
+
 	verifyToken: publicProcedure
 		.input(z.object({ token: z.string().min(1).max(255) }))
 		.mutation(async ({ input }) => {
@@ -79,12 +98,6 @@ export const githubRouter = router({
 				.onConflictDoUpdate({
 					target: githubProfiles.login,
 					set: {
-						name: user.name,
-						avatarUrl: user.avatar_url,
-						bio: user.bio,
-						email: user.email,
-						publicRepos: user.public_repos,
-						followers: user.followers,
 						encryptedToken,
 						updatedAt: new Date(),
 					},
