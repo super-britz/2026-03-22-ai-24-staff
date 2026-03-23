@@ -3,6 +3,14 @@ import {
 	AvatarFallback,
 	AvatarImage,
 } from "@2026-03-22-ai-24-staff/ui/components/avatar";
+import { Button } from "@2026-03-22-ai-24-staff/ui/components/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@2026-03-22-ai-24-staff/ui/components/dialog";
 import { Skeleton } from "@2026-03-22-ai-24-staff/ui/components/skeleton";
 import {
 	Table,
@@ -13,6 +21,7 @@ import {
 	TableRow,
 } from "@2026-03-22-ai-24-staff/ui/components/table";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { GitHubBindForm } from "@/components/github-bind-form";
 import { trpc } from "@/utils/trpc";
@@ -75,21 +84,32 @@ function TableSkeleton() {
 }
 
 export default function UsersPage() {
+	const [open, setOpen] = useState(false);
 	const queryClient = useQueryClient();
 	const { data: users, isLoading } = useQuery(trpc.github.list.queryOptions());
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="mb-6 font-bold text-2xl">用户列表</h1>
-
-			<div className="mb-8 max-w-lg">
-				<GitHubBindForm
-					onSuccess={() => {
-						queryClient.invalidateQueries({
-							queryKey: trpc.github.list.queryOptions().queryKey,
-						});
-					}}
-				/>
+			<div className="mb-6 flex items-center justify-between">
+				<h1 className="font-bold text-2xl">用户列表</h1>
+				<Dialog open={open} onOpenChange={setOpen}>
+					<DialogTrigger asChild>
+						<Button>绑定 GitHub 账号</Button>
+					</DialogTrigger>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle>绑定 GitHub 账号</DialogTitle>
+						</DialogHeader>
+						<GitHubBindForm
+							onSuccess={() => {
+								setOpen(false);
+								queryClient.invalidateQueries({
+									queryKey: trpc.github.list.queryOptions().queryKey,
+								});
+							}}
+						/>
+					</DialogContent>
+				</Dialog>
 			</div>
 
 			<div className="rounded-md border">
